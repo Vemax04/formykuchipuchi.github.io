@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>happo birthday</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+  <body>
+  <div class="intro">
+    <h1 id="intro-text">Something special is coming for youu...</h1>
+
+    <div class="plane-container">
+      <img id="plane" src="assets/plane.png" alt="Paper Plane" />
+    </div>
+
+    <div id="hearts"></div>
+  </div>
+
+  <div class="envelope-container hidden" id="envelope-container">
+    <div class="envelope" id="envelope">💌</div>
+    <p class="tap-text hidden" id="tap-text">Tap to open</p>
+  </div>
+
+  <!-- 🎁 Popup Card -->
+  <div class="card hidden" id="popup-card">
+    <div class="card-content">
+      <h2>💖 Dear Mumtaza 💜</h2>
+      <p class="message">
+        "Wishing you a day filled with love, laughter, all your heart's desires. Happy Birthday!<br>
+        You deserve all the love, smiles, and magic in the world today 💫"
+      </p>
+      <p class="signature">With all my love,<br>Yours truly, </p>
+      <p class="name">Fine Shyt<br> ❤️✨💜 </p>
+    </div>
+  </div>
+
+  <canvas id="confetti"></canvas>
+
+  <script>
+    // plane + envelope sequence
+    window.onload = () => {
+      const plane = document.getElementById("plane").parentElement;
+      const envelopeContainer = document.getElementById("envelope-container");
+      const tapText = document.getElementById("tap-text");
+      const envelope = document.getElementById("envelope");
+      const card = document.getElementById("popup-card");
+
+      // Plane animation
+      setTimeout(() => {
+        plane.classList.add("fly");
+        const heartInterval = setInterval(() => {
+          const heart = document.createElement("div");
+          heart.classList.add("heart");
+          heart.innerHTML = "❤️";
+          heart.style.left = (plane.offsetLeft + 20) + "px";
+          heart.style.top = (plane.offsetTop + 20) + "px";
+          document.body.appendChild(heart);
+          setTimeout(() => heart.remove(), 2000);
+        }, 350);
+        setTimeout(() => clearInterval(heartInterval), 4000);
+      }, 2000);
+
+      // Show envelope after plane
+      setTimeout(() => {
+        document.querySelector(".intro").style.display = "none";
+        envelopeContainer.classList.remove("hidden");
+        setTimeout(() => tapText.classList.remove("hidden"), 1200);
+      }, 7000);
+
+      // Open card on envelope click
+      envelope.addEventListener("click", () => {
+        envelopeContainer.classList.add("hidden");
+        showCard();
+      });
+
+      // Show popup card with confetti
+      function showCard() {
+        card.classList.remove("hidden");
+        card.classList.add("show");
+        startConfetti();
+        setTimeout(stopConfetti, 3000);
+      }
+
+      // Simple confetti
+      const confettiCanvas = document.getElementById("confetti");
+      const ctx = confettiCanvas.getContext("2d");
+      let confettiPieces = [];
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+
+      function randomColor() {
+        const colors = ["#ff66b2", "#ff99cc", "#cc66ff", "#ffccff", "#ffffff"];
+        return colors[Math.floor(Math.random() * colors.length)];
+      }
+
+      function createConfetti() {
+        for (let i = 0; i < 150; i++) {
+          confettiPieces.push({
+            x: Math.random() * confettiCanvas.width,
+            y: Math.random() * confettiCanvas.height - confettiCanvas.height,
+            r: Math.random() * 6 + 2,
+            c: randomColor(),
+            s: Math.random() * 3 + 2,
+          });
+        }
+      }
+
+      function drawConfetti() {
+        ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+        confettiPieces.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
+          ctx.fillStyle = p.c;
+          ctx.fill();
+          p.y += p.s;
+          if (p.y > confettiCanvas.height) p.y = -10;
+        });
+        requestAnimationFrame(drawConfetti);
+      }
+      function startConfetti() {
+        confettiPieces = [];
+        createConfetti();
+        drawConfetti();
+      }
+
+      function stopConfetti() {
+        confettiPieces = [];
+      }
+    };
+
+    envelope.addEventListener("click", () => {
+
+    // Tap To see More
+    setTimeout(() => {
+      const tapToMore =
+  document.createElement("p");
+      tapToMore.textContent = "Tap to see more suprises🎁";
+      tapToMore.style.position = "fixed";
+      tapToMore.style.bottom = "60px";
+      tapToMore.style.width = "100%";
+      tapToMore.style.textAlign = "center";
+      tapToMore.style.color = "#fff";
+      tapToMore.style.background = "linear-gradient(90deg, rgba(255, 140, 215, 0.95))";
+      tapToMore.style.padding = "10px 18px";
+      tapToMore.style.borderRadius = "999px";
+      tapToMore.style.boxShadow = "0 10px 30px rgba(167, 92, 203, 0.2)";
+      tapToMore.style.fontSize = "1.3rem";
+      tapToMore.style.fontWeight = "600";
+      tapToMore.style.animation = "pluse 1.8s infinite";
+      tapToMore.style.cursor = "pointer";
+      document.body.appendChild(tapToMore);
+      // click
+      tapToMore.addEventListener("click", () => {
+         const fade =
+      document.createElement("div")
+         fade.style.position ="fixed";
+         fade.style.top = "0";
+         fade.style.left = "0";
+         fade.style.width = "100%";
+         fade.style.hieght = "100%";
+         fade.style.background = "#fff";
+         fade.style.opacity = "0";
+         fade.style.transition = "opacity 1s ease";
+         fade.style.zIndex = 9999;
+      document.body.appendChild(fade);
+
+      //tigger fade effects
+      setTimeout(() => (fade.style.opacity = 1), 10);
+
+      //go to next page
+      setTimeout(() => {
+        window.location.href = "main.html";
+      }, 1000);
+    } );
+    }, 2000);
+      });
+  </script>
+</body>
+</html>
