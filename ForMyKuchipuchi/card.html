@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Special Surprise</title>
+  <style>
+    body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+  font-family: "Poppins", sans-serif;
+  overflow: hidden;
+}
+
+h1 {
+  font-size: 1.8rem;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* Plane animation */
+.plane-container {
+  position: absolute;
+  top: 45%;
+  left: -100px;
+  width: 80px;
+  height: auto;
+  opacity: 0;
+}
+#plane { width: 100%; height: auto; }
+.fly {
+  animation: flyAcross 4s forwards ease-in-out;
+  opacity: 1;
+}
+@keyframes flyAcross {
+  0% { left: -100px; top: 45%; transform: rotate(5deg); }
+  50% { left: 40%; top: 35%; transform: rotate(-5deg); }
+  100% { left: 110%; top: 40%; opacity: 0; }
+}
+
+/* Floating hearts */
+.heart {
+  position: absolute;
+  font-size: 1.2rem;
+  color: red;
+  animation: floatUp 2s forwards;
+  opacity: 0.8;
+}
+@keyframes floatUp {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-80px) scale(0.5); opacity: 0; }
+}
+
+/* Envelope */
+.envelope-container { display: flex; flex-direction: column; align-items: center; }
+.envelope { font-size: 3.5rem; cursor: pointer; animation: wiggle 1s infinite; }
+@keyframes wiggle {
+  0%,100% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  50% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}
+
+/* Tap text */
+.tap-text {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: #fff;
+  font-weight: bold;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+/* Popup card */
+.card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: #fff0f6;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  width: 90%;
+  max-width: 400px;
+  padding: 25px;
+  text-align: center;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+  opacity: 0;
+  z-index: 10;
+}
+.card.show {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+.card-content h2 {
+  color: #c55ef6;
+  font-family: "Dancing Script", cursive;
+  font-size: 1.8rem;
+}
+.card-content .message {
+  color: #333;
+  margin: 15px 0;
+  font-style: italic;
+}
+.card-content .signature {
+  color: #b44bdc;
+  font-weight: bold;
+  font-family: "Dancing Script", cursive;
+}
+.card-content .name {
+    margin-top: 8px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 20px;
+    color: #a64dbf;
+}
+
+/* Hide helper */
+.hidden { display: none; }
+
+#confetti {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+  </style>
+</head>
+<body>
+  <div class="intro">
+    <h1 id="intro-text">Something special is coming for you...</h1>
+
+    <div class="plane-container">
+      <img id="plane" src="assets/plane.png" alt="Paper Plane" />
+    </div>
+
+    <div id="hearts"></div>
+  </div>
+
+  <div class="envelope-container hidden" id="envelope-container">
+    <div class="envelope" id="envelope">💌</div>
+    <p class="tap-text hidden" id="tap-text">Tap to open</p>
+  </div>
+
+  <!-- 🎁 Popup Card -->
+  <div class="card hidden" id="popup-card">
+    <div class="card-content">
+      <h2>💖 Dear Mumtaza 💜</h2>
+      <p class="message">
+        "Wishing you a day filled with love, laughter, all your heart's desires. Happy Birthday!<br>
+        You deserve all the love, smiles, and magic in the world today 💫"
+      </p>
+      <p class="signature">With all my love,<br>Yours truly, </p>
+      <p class="name">Fine Shyt </p>
+    </div>
+  </div>
+
+  <canvas id="confetti"></canvas>
+
+  <script>
+    // plane + envelope sequence
+    window.onload = () => {
+      const plane = document.getElementById("plane").parentElement;
+      const envelopeContainer = document.getElementById("envelope-container");
+      const tapText = document.getElementById("tap-text");
+      const envelope = document.getElementById("envelope");
+      const card = document.getElementById("popup-card");
+
+      // Plane animation
+      setTimeout(() => {
+        plane.classList.add("fly");
+        const heartInterval = setInterval(() => {
+          const heart = document.createElement("div");
+          heart.classList.add("heart");
+          heart.innerHTML = "❤️";
+          heart.style.left = (plane.offsetLeft + 20) + "px";
+          heart.style.top = (plane.offsetTop + 20) + "px";
+          document.body.appendChild(heart);
+          setTimeout(() => heart.remove(), 2000);
+        }, 350);
+        setTimeout(() => clearInterval(heartInterval), 4000);
+      }, 2000);
+
+      // Show envelope after plane
+      setTimeout(() => {
+        document.querySelector(".intro").style.display = "none";
+        envelopeContainer.classList.remove("hidden");
+        setTimeout(() => tapText.classList.remove("hidden"), 1200);
+      }, 7000);
+
+      // Open card on envelope click
+      envelope.addEventListener("click", () => {
+        envelopeContainer.classList.add("hidden");
+        showCard();
+      });
+
+      // Show popup card with confetti
+      function showCard() {
+        card.classList.remove("hidden");
+        card.classList.add("show");
+        startConfetti();
+        setTimeout(stopConfetti, 3000);
+      }
+
+      // Simple confetti
+      const confettiCanvas = document.getElementById("confetti");
+      const ctx = confettiCanvas.getContext("2d");
+      let confettiPieces = [];
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+
+      function randomColor() {
+        const colors = ["#ff66b2", "#ff99cc", "#cc66ff", "#ffccff", "#ffffff"];
+        return colors[Math.floor(Math.random() * colors.length)];
+      }
+
+      function createConfetti() {
+        for (let i = 0; i < 150; i++) {
+          confettiPieces.push({
+            x: Math.random() * confettiCanvas.width,
+            y: Math.random() * confettiCanvas.height - confettiCanvas.height,
+            r: Math.random() * 6 + 2,
+            c: randomColor(),
+            s: Math.random() * 3 + 2,
+          });
+        }
+      }
+
+      function drawConfetti() {
+        ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+        confettiPieces.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
+          ctx.fillStyle = p.c;
+          ctx.fill();
+          p.y += p.s;
+          if (p.y > confettiCanvas.height) p.y = -10;
+        });
+        requestAnimationFrame(drawConfetti);
+      }
+      function startConfetti() {
+        confettiPieces = [];
+        createConfetti();
+        drawConfetti();
+      }
+
+      function stopConfetti() {
+        confettiPieces = [];
+      }
+    };
+  </script>
+</body>
+</html>
