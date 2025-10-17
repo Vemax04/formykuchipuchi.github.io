@@ -22,12 +22,14 @@ body {
 .title {
   font-family: 'Great Vibes', cursive;
   font-size: 2rem;
-  color: #fff7fb;
+    background: linear-gradient(90deg, #ff4b2b, #ff416c, #ffafbd, #ffc3a0, #ff9a9e);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   text-shadow: 1px 2px 3px rgba(0, 0, 0, 0.4);
 }
 .subtitle {
   font-size: 1rem;
-  color: #f8e8ff;
+  color: black;
 }
 
 /* Regular sections */
@@ -267,4 +269,5 @@ audio {
 .footer span {
   font-family: cursive;
   color: maroon;
+
 }
