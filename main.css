@@ -22,9 +22,7 @@ body {
 .title {
   font-family: 'Great Vibes', cursive;
   font-size: 2rem;
-  background: linear-gradient(90deg, #ff66b3, #b366ff);
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: rgb(255, 48, 103);
   text-shadow: 1px 2px 3px rgba(0, 0, 0, 0.4);
 }
 .subtitle {
@@ -271,4 +269,5 @@ audio {
   color: maroon;
 
 }
+
 
